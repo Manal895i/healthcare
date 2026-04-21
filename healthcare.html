@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HealthCare Appointment Booking</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+/* Reset and Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Prevent header overlap when scrolling to sections */
+}
+
+:root {
+    --primary: #0ea5e9;
+    --primary-dark: #0284c7;
+    --secondary: #0f172a;
+    --bg-light: #f8fafc;
+    --text-main: #334155;
+    --text-muted: #64748b;
+    --white: #ffffff;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+/* Header & Nav */
+.top-bar {
+    background: var(--secondary);
+    color: var(--white);
+    padding: 0.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    align-items: center;
+}
+
+.top-bar i { margin-right: 8px; color: var(--primary); }
+
+header {
+    background: var(--white);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo i { color: var(--primary); font-size: 2rem; }
+
+nav a {
+    color: var(--text-main);
+    text-decoration: none;
+    margin-left: 2rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--primary);
+}
+
+.btn-book {
+    background: var(--primary);
+    color: var(--white);
+    padding: 10px 24px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-book:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=2000&auto=format&fit=crop') no-repeat center/cover;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    padding: 0 20px;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    animation: fadeInDown 1s ease-out;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #e2e8f0;
+    animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Main Content */
+main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+
+.section-title {
+    text-align: center;
+    font-size: 2.2rem;
+    color: var(--secondary);
+    margin-bottom: 3rem;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+/* Doctors CSS Grid */
+.doctor-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.doctor-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+}
+
+.doctor-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    border-color: var(--primary);
+}
+
+.doctor-card img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 4px solid var(--bg-light);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+.doctor-card h3 { color: var(--secondary); font-size: 1.3rem; margin-bottom: 5px; }
+.doctor-card .spec { color: var(--primary); font-weight: 600; margin-bottom: 10px; }
+.doctor-card .exp { color: var(--text-muted); font-size: 0.95rem; }
+
+.doctor-card button {
+    margin-top: 20px;
+    background: none;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.doctor-card button:hover { background: var(--primary); color: white; }
+
+/* Booking Form */
+.booking-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1);
+    margin-top: 4rem;
+}
+
+.booking-img {
+    background: url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=1000') no-repeat center/cover;
+    min-height: 400px;
+}
+
+.booking-form-content {
+    padding: 3rem;
+}
+
+form .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--secondary); }
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s;
+    font-family: inherit;
+    background: #f8fafc;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+    background: white;
+}
+
+.form-group textarea { resize: vertical; min-height: 100px; }
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+}
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    transform: translateY(20px);
+    transition: 0.3s;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+.modal-icon i {
+    font-size: 4rem;
+    color: #10b981; /* Green success */
+    margin-bottom: 20px;
+}
+.modal-content h3 { font-size: 1.5rem; color: var(--secondary); margin-bottom: 10px; }
+.modal-content p { color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; font-size: 1.05rem; }
+
+/* Footer */
+footer {
+    background: var(--secondary);
+    color: #e2e8f0;
+    padding: 4rem 2rem 2rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 3rem;
+}
+
+.footer-col h3 { color: white; margin-bottom: 20px; font-size: 1.3rem; }
+.footer-col p { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; color: #cbd5e1; }
+.footer-col i { color: var(--primary); }
+
+.social-links { display: flex; gap: 15px; margin-top: 20px; }
+.social-links a {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.1); display: flex;
+    align-items: center; justify-content: center;
+    color: white; text-decoration: none; transition: 0.3s;
+}
+.social-links a:hover { background: var(--primary); transform: translateY(-3px); }
+
+.copyright {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: #94a3b8;
+}
+
+@media(max-width: 900px) {
+    .booking-section { grid-template-columns: 1fr; }
+    .booking-img { height: 250px; min-height: 250px; }
+}
+
+@media(max-width: 768px) {
+    header { flex-direction: column; gap: 15px; text-align: center; }
+    nav { margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    nav a { margin: 0 10px; }
+    form .grid-2 { grid-template-columns: 1fr; }
+    .hero-content h1 { font-size: 2.5rem; }
+    .top-bar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div><i class="fas fa-envelope"></i> healthcare@email.com &nbsp;&nbsp;|&nbsp;&nbsp; <i class="fas fa-phone-alt"></i> +91 9876543210</div>
+    <div><i class="fas fa-clock"></i> Mon-Sat: 8:00 AM - 8:00 PM</div>
+</div>
+
+<header>
+    <div class="logo"><i class="fas fa-heartbeat"></i> HealthCare</div>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#doctors">Our Specialists</a>
+        <a href="#appointment">Appointments</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <a href="#appointment" class="btn-book">Book Now</a>
+</header>
+
+<div class="hero">
+    <div class="hero-content">
+        <h1>Your Health, Our Priority</h1>
+        <p>Book an appointment with top specialists instantly. Experience world-class medical care from the comfort of your home.</p>
+        <a href="#appointment" class="btn-book" style="font-size: 1.1rem; padding: 15px 30px;">Make an Appointment</a>
+    </div>
+</div>
+
+<main>
+
+<section id="doctors">
+    <h2 class="section-title">Meet Our Specialists</h2>
+    <div class="doctor-container">
+        <div class="doctor-card">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr Amit Sharma">
+            <h3>Dr. Amit Sharma</h3>
+            <p class="spec">Cardiologist</p>
+            <p class="exp"><i class="fas fa-award"></i> 10+ Years Experience</p>
+            <button class="profile-btn">View Profile</button>
+        </div>
+        <div class="doctor-card">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Dr Priya Verma">
+            <h3>Dr. Priya Verma</h3>
+            <p class="spec">Dermatologist</p>
+            <p class="exp"><i class="fas fa-award"></i> 8+ Years Experience</p>
+            <button class="profile-btn">View Profile</button>
+        </div>
+        <div class="doctor-card">
+            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Dr Rahul Mehta">
+            <h3>Dr. Rahul Mehta</h3>
+            <p class="spec">Orthopedic</p>
+            <p class="exp"><i class="fas fa-award"></i> 12+ Years Experience</p>
+            <button class="profile-btn">View Profile</button>
+        </div>
+    </div>
+</section>
+
+<section id="appointment">
+    <div class="booking-section">
+        <div class="booking-img"></div>
+        <div class="booking-form-content">
+            <h2 style="font-size: 2rem; color: var(--secondary); margin-bottom: 2rem;">Book Appointment</h2>
+            <form id="appointmentForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="patientName" placeholder="e.g. John Doe" required>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="patientEmail" placeholder="example@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="patientPhone" placeholder="+91 XXXXX XXXXX" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Select Specialist</label>
+                    <select id="doctorSelect" required>
+                        <option value="">-- Choose Doctor --</option>
+                        <option value="Dr. Amit Sharma">Dr. Amit Sharma (Cardiologist)</option>
+                        <option value="Dr. Priya Verma">Dr. Priya Verma (Dermatologist)</option>
+                        <option value="Dr. Rahul Mehta">Dr. Rahul Mehta (Orthopedic)</option>
+                    </select>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Preferred Date</label>
+                        <input type="date" id="apptDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Time</label>
+                        <input type="time" id="apptTime" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Describe your problem (Optional)</label>
+                    <textarea id="patientNotes" placeholder="Briefly describe your symptoms..."></textarea>
+                </div>
+                <button type="submit" class="btn-book" style="width: 100%; border-radius: 8px;">Confirm Appointment</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer id="contact">
+    <div class="footer-content">
+        <div class="footer-col">
+            <h3><i class="fas fa-heartbeat" style="color: var(--primary);"></i> HealthCare</h3>
+            <p style="margin-top: 15px; color: #94a3b8; line-height: 1.8;">Providing world-class medical services with state-of-the-art facilities and experienced specialists. Your health is safe with us.</p>
+        </div>
+        <div class="footer-col" style="padding-left: 20px;">
+            <h3>Quick Links</h3>
+            <p><a href="#" style="color: #cbd5e1; text-decoration: none;"><i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> Home</a></p>
+            <p><a href="#doctors" style="color: #cbd5e1; text-decoration: none;"><i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> Our Specialists</a></p>
+            <p><a href="#appointment" style="color: #cbd5e1; text-decoration: none;"><i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> Book Appointment</a></p>
+            <p><a href="#" style="color: #cbd5e1; text-decoration: none;"><i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> Patient Portal</a></p>
+        </div>
+        <div class="footer-col">
+            <h3>Contact Us</h3>
+            <p><i class="fas fa-map-marker-alt"></i> 123 Healthcare Avenue, Pune, MH</p>
+            <p><i class="fas fa-phone-alt"></i> +91 9876543210</p>
+            <p><i class="fas fa-envelope"></i> healthcare@email.com</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <p>© 2026 HealthCare Clinic | All Rights Reserved</p>
+    </div>
+</footer>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
+        <h3>Booking Confirmed!</h3>
+        <p id="modalMessage">Your appointment has been successfully scheduled.</p>
+        <button onclick="closeModal()" class="btn-book" style="width: 100%; border-radius: 8px;">Back to Home</button>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('appointmentForm');
+        const modal = document.getElementById('successModal');
+        const modalMessage = document.getElementById('modalMessage');
+        
+        // Handle Form Submission
+        if(form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); 
+                
+                const name = document.getElementById('patientName').value;
+                const doc = document.getElementById('doctorSelect').value;
+                const date = document.getElementById('apptDate').value;
+                const time = document.getElementById('apptTime').value;
+                
+                // Format date string for readability
+                const dateObj = new Date(date);
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = dateObj.toLocaleDateString('en-US', options);
+
+                modalMessage.innerHTML = `Thank you, <strong>${name}</strong>!<br><br>Your appointment with <span style="color:var(--primary); font-weight:600;">${doc}</span> is confirmed for <strong>${formattedDate}</strong> at <strong>${time}</strong>.`;
+                
+                modal.classList.add('active');
+                form.reset();
+            });
+        }
+
+        // View Profile buttons
+        const profileBtns = document.querySelectorAll('.profile-btn');
+        profileBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert("Redirecting to doctor's full profile page... (Feature coming soon)");
+            });
+        });
+    });
+
+    // Close Modal
+    function closeModal() {
+        document.getElementById('successModal').classList.remove('active');
+    }
+</script>
+
+</body>
+</html>
